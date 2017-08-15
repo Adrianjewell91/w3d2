@@ -63,10 +63,10 @@ VALUES
   (3, 4),
   (4, 1);
 
-  INSERT INTO
-    replies(question_id, parent_reply, author_id, body)
-  VALUES
-    (1, NULL, 2, "Blah blah blah");
+INSERT INTO
+  replies(question_id, parent_reply, author_id, body)
+VALUES
+  (1, NULL, 2, "Blah blah blah");
 
 INSERT INTO
   question_likes(user_id, question_id)
