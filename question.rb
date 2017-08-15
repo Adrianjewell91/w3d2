@@ -1,4 +1,5 @@
 require_relative 'questions_db'
+require_relative 'user'
 
 class Question
   attr_accessor :title, :body
@@ -48,6 +49,20 @@ class Question
     @title = options['title']
     @body = options['body']
     @author_id = options['author_id']
+  end
+
+  def author
+    author = QuestionsDB.instance.execute(<<-SQL, @author_id)
+      SELECT
+        users.*
+      FROM
+        users
+        JOIN questions
+        ON questions.author_id = users.id
+      WHERE
+        author_id = ?
+    SQL
+    author
   end
 
 end
