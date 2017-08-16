@@ -1,5 +1,6 @@
 require_relative "questions_db"
-
+require_relative "question"
+require 'byebug'
 class Reply
   attr_accessor :title, :body
   attr_reader :id, :parent_reply, :question_id, :author_id
@@ -41,5 +42,23 @@ class Reply
 
   def author
     User.find_by_id(@author_id)
+  end
+
+  def question
+    Question.find_by_id(@question_id)
+  end
+
+  def parent_reply
+    # byebug
+    reply = QuestionsDB.instance.execute(<<-SQL, @parent_reply)
+      SELECT
+        *
+      FROM
+        replies
+      WHERE
+        id = ?
+    SQL
+    return nil unless reply.length > 0 
+    [Reply.new(reply.first)]
   end
 end
