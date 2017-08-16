@@ -2,7 +2,7 @@ require_relative "questions_db"
 
 class Reply
   attr_accessor :title, :body
-  attr_reader :id, :parent_reply, :question_id
+  attr_reader :id, :parent_reply, :question_id, :author_id
 
   def self.find_by_author_id(author_id)
     replies = QuestionsDB.instance.execute(<<-SQL, author_id)
@@ -36,5 +36,10 @@ class Reply
     @body = options["body"]
     @parent_reply = options["parent_reply"]
     @question_id = options["question_id"]
+    @author_id = options["author_id"]
+  end
+
+  def author
+    User.find_by_id(@author_id)
   end
 end

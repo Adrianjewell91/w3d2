@@ -1,5 +1,6 @@
 require_relative 'questions_db'
 require_relative 'user'
+require_relative 'reply'
 
 class Question
   attr_accessor :title, :body
@@ -52,7 +53,7 @@ class Question
   end
 
   def author
-    author = QuestionsDB.instance.execute(<<-SQL, @author_id)
+    authors = QuestionsDB.instance.execute(<<-SQL, @author_id)
       SELECT
         users.*
       FROM
@@ -62,7 +63,11 @@ class Question
       WHERE
         author_id = ?
     SQL
-    author
+    authors.map { |author| User.new(author) }
+  end
+
+  def replies
+    Reply.find_by_question_id(@id)
   end
 
 end
